@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import LoginModal from './LoginModal';
-import RegisterModal from './RegisterModal'; // Importar el modal de registro
+import RegisterModal from './RegisterModal';
 
 const NavBar = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -9,12 +9,12 @@ const NavBar = () => {
 
   const openLoginModal = () => {
     setIsLoginOpen(true);
-    setIsRegisterOpen(false); // Cerrar el de registro si está abierto
+    setIsRegisterOpen(false); // Asegúrate de cerrar el modal de registro si está abierto
   };
 
   const openRegisterModal = () => {
     setIsRegisterOpen(true);
-    setIsLoginOpen(false); // Cerrar el de login si está abierto
+    setIsLoginOpen(false); // Asegúrate de cerrar el modal de login si está abierto
   };
 
   const closeLoginModal = () => setIsLoginOpen(false);
@@ -23,8 +23,11 @@ const NavBar = () => {
   return (
     <nav style={styles.navbar}>
       <div style={styles.logoContainer}>
-        <img src="/imagenes/logoimagen.png" alt="PawPal" style={styles.logo} />
-        <span style={styles.logoText}>PawPal</span>
+        {/* Link al hacer clic en el logo */}
+        <Link to="/" style={styles.logoLink}>
+          <img src="/imagenes/logoimagen.png" alt="PawPal" style={styles.logo} />
+          <span style={styles.logoText}>PawPal</span>
+        </Link>
       </div>
       <ul style={styles.menu}>
         <li><Link to="/adopcion" style={styles.link}>Adopción</Link></li>
@@ -37,17 +40,11 @@ const NavBar = () => {
         <button onClick={openRegisterModal} style={styles.registerButton}>Registro</button>
       </div>
 
-      {/* Modal de Login */}
-      <LoginModal
-        isOpen={isLoginOpen}
-        onRequestClose={closeLoginModal}
-      />
-
-      {/* Modal de Registro */}
-      <RegisterModal
-        isOpen={isRegisterOpen}
-        onRequestClose={closeRegisterModal}
-      />
+      {/* Modal para Login */}
+      <LoginModal isOpen={isLoginOpen} onRequestClose={closeLoginModal} />
+      
+      {/* Modal para Registro */}
+      <RegisterModal isOpen={isRegisterOpen} onRequestClose={closeRegisterModal} />
     </nav>
   );
 };
@@ -68,6 +65,11 @@ const styles = {
   logoContainer: {
     display: 'flex',
     alignItems: 'center',
+  },
+  logoLink: {
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
   },
   logo: {
     height: '40px',
@@ -105,6 +107,7 @@ const styles = {
     padding: '8px 16px',
     backgroundColor: '#2e2c2d',
     color: '#ffffff',
+    border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
   },

@@ -1,66 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa'; // Iconos de usuario, correo y contraseña
+import LoginModal from './LoginModal'; // Importa el LoginModal
 
-const RegisterModal = ({ isOpen, onRequestClose }) => {
-  return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      contentLabel="Register Modal"
-      style={customStyles}
-      overlayClassName="overlay" // Clase para manejar el fondo oscuro
-    >
-      <div style={styles.container}>
-        <div style={styles.leftSide}>
-          <h2 style={styles.header}>Crea Tu Cuenta</h2>
-          <form>
-            <div style={styles.formGroup}>
-              <FaUser style={styles.icon} />
-              <input type="text" placeholder="Full Name" style={styles.input} />
-            </div>
-            <div style={styles.formGroup}>
-              <FaEnvelope style={styles.icon} />
-              <input type="email" placeholder="Email" style={styles.input} />
-            </div>
-            <div style={styles.formGroup}>
-              <FaLock style={styles.icon} />
-              <input type="password" placeholder="Password" style={styles.input} />
-            </div>
-            <div style={styles.checkboxGroup}>
-              <input type="checkbox" id="terms" />
-              <label htmlFor="terms">
-                I agree to all <a href="#">Terms & Conditions</a>
-              </label>
-            </div>
-            <button type="submit" style={styles.button}>Create Account</button>
-          </form>
-          <p>Or Sign up with</p>
-          <div style={styles.socialButtons}>
-            <button style={styles.socialButton}>Google</button>
-            <button style={styles.socialButton}>Facebook</button>
-          </div>
-          <p>
-            Already have an account?{' '}
-            <a href="#" onClick={onRequestClose}>
-              Sign in
-            </a>
-          </p>
-        </div>
-
-        <div style={styles.rightSide}>
-          <img
-            src="/imagenes/logoimagen.png" // Ruta de tu logo
-            alt="PawPal Logo"
-            style={styles.logoImage}
-          />
-        </div>
-      </div>
-    </Modal>
-  );
-};
-
-// Definir estilos personalizados para el modal
 const customStyles = {
   content: {
     top: '50%',
@@ -69,16 +11,87 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
-    width: '800px',
     borderRadius: '10px',
-    padding: '0',
+    width: '50%',
     display: 'flex',
-    flexDirection: 'row',
+    padding: '0',
   },
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.75)', // Color de fondo semi-transparente
-    zIndex: 1000, // Asegurarse de que el modal esté por encima de todo
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
+};
+
+const RegisterModal = ({ isOpen, onRequestClose }) => {
+  const [showLogin, setShowLogin] = useState(false);
+
+  const handleSignInClick = () => {
+    setShowLogin(true); // Muestra el LoginModal
+  };
+
+  const closeModals = () => {
+    setShowLogin(false);
+    onRequestClose(); // Cierra el modal de registro
+  };
+
+  return (
+    <>
+      <Modal
+        isOpen={isOpen && !showLogin}
+        onRequestClose={onRequestClose}
+        style={customStyles}
+        ariaHideApp={false}
+      >
+        <div style={styles.container}>
+          <div style={styles.leftSide}>
+            <h2 style={styles.header}>Crea Tu Cuenta</h2>
+            <form>
+              <div style={styles.formGroup}>
+                <FaUser style={styles.icon} />
+                <input type="text" placeholder="Full Name" style={styles.input} />
+              </div>
+              <div style={styles.formGroup}>
+                <FaEnvelope style={styles.icon} />
+                <input type="email" placeholder="Email" style={styles.input} />
+              </div>
+              <div style={styles.formGroup}>
+                <FaLock style={styles.icon} />
+                <input type="password" placeholder="Password" style={styles.input} />
+              </div>
+              <div style={styles.checkboxGroup}>
+                <input type="checkbox" id="terms" />
+                <label htmlFor="terms">
+                  I agree to all <a href="#">Terms & Conditions</a>
+                </label>
+              </div>
+              <button type="submit" style={styles.button}>Create Account</button>
+            </form>
+            <p>Or Sign up with</p>
+            <div style={styles.socialButtons}>
+              <button style={styles.socialButton}>Google</button>
+              <button style={styles.socialButton}>Facebook</button>
+            </div>
+            <p>
+              Already have an account?{' '}
+              <a href="#" onClick={handleSignInClick}>
+                Sign in
+              </a>
+            </p>
+          </div>
+
+          <div style={styles.rightSide}>
+            <img
+              src="/imagenes/logoimagen.png" // Ruta de tu logo
+              alt="PawPal Logo"
+              style={styles.logoImage}
+            />
+          </div>
+        </div>
+      </Modal>
+
+      {/* Muestra el LoginModal cuando el usuario hace clic en "Sign in" */}
+      <LoginModal isOpen={showLogin} onRequestClose={closeModals} />
+    </>
+  );
 };
 
 // Estilos del contenido del modal

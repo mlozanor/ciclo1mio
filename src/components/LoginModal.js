@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { FaGoogle, FaFacebookF } from 'react-icons/fa'; // Para íconos de Google y Facebook
+import RegisterModal from './RegisterModal'; // Importa el RegisterModal
 
 const customStyles = {
   content: {
@@ -16,58 +17,81 @@ const customStyles = {
     padding: '0',
   },
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)', // Fondo oscuro para bloquear la interacción con el fondo
+    zIndex: 1000, // Asegurar que el modal esté por encima de todo
   },
 };
 
 const LoginModal = ({ isOpen, onRequestClose }) => {
+  const [showRegister, setShowRegister] = useState(false);
+
+  const handleSignUpClick = () => {
+    setShowRegister(true); // Muestra el RegisterModal
+  };
+
+  const closeModals = () => {
+    setShowRegister(false);
+    onRequestClose(); // Cierra el modal de login
+  };
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      style={customStyles}
-      ariaHideApp={false} // Necesario para evitar warnings en desarrollo
-    >
-      <div style={{ flex: 1, padding: '40px', backgroundColor: '#f9f9f9', borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px' }}>
-        <h2 style={{ marginBottom: '20px', fontSize: '24px', color: '#4A4A4A' }}>Log in PawPal</h2>
+    <>
+      <Modal
+        isOpen={isOpen && !showRegister}
+        onRequestClose={onRequestClose}
+        style={customStyles}
+         // Necesario para evitar warnings en desarrollo
+          >
+            <div style={{ flex: 1, padding: '40px', backgroundColor: '#f9f9f9', borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px' }}>
+              <h2 style={{ marginBottom: '20px', fontSize: '24px', color: '#4A4A4A', textAlign: 'center' }}>Log in PawPal</h2>
 
-        <div style={{ marginBottom: '20px' }}>
-          <label>Full Name</label>
-          <input type="text" placeholder="Full Name" style={styles.input} />
-        </div>
+              <div style={{ marginBottom: '20px' }}>
+            <label>Full Name</label>
+            <input type="text" placeholder="Full Name" style={styles.input} />
+              </div>
 
-        <div style={{ marginBottom: '10px' }}>
-          <label>Password</label>
-          <input type="password" placeholder="Password" style={styles.input} />
-        </div>
+              <div style={{ marginBottom: '10px' }}>
+            <label>Password</label>
+            <input type="password" placeholder="Password" style={styles.input} />
+              </div>
 
-        <a href="#" style={styles.forgotPassword}>Forgot Password?</a>
+              <a href="#" style={styles.forgotPassword}>Forgot Password?</a>
 
-        <div style={{ marginBottom: '20px' }}>
-          <input type="checkbox" id="keepLoggedIn" />
-          <label htmlFor="keepLoggedIn" style={styles.keepLoggedIn}>Keep me logged in</label>
-        </div>
+              <div style={{ marginBottom: '20px' }}>
+            <input type="checkbox" id="keepLoggedIn" />
+            <label htmlFor="keepLoggedIn" style={styles.keepLoggedIn}>Keep me logged in</label>
+              </div>
 
-        <button style={styles.loginButton}>Log In</button>
+              <button style={styles.loginButton}>Log In</button>
 
-        <div style={styles.divider}>
-          <span>Or Sign Up with</span>
-        </div>
+              <div style={styles.divider}>
+            <span>Or Sign Up with</span>
+              </div>
 
-        <div style={styles.socialButtons}>
-          <button style={styles.socialButton}><FaGoogle /></button>
-          <button style={styles.socialButton}><FaFacebookF /></button>
-        </div>
+              <div style={styles.socialButtons}>
+            <button style={styles.socialButton}><FaGoogle /></button>
+            <button style={styles.socialButton}><FaFacebookF /></button>
+              </div>
 
-        <p style={styles.signUpText}>
-          Don’t have an account? <a href="#">Sign up</a>
-        </p>
-      </div>
+              <p style={styles.signUpText}>
+            Don’t have an account?{' '}
+            <a href="#" onClick={handleSignUpClick}>Sign up</a>
+              </p>
+            </div>
 
-      <div style={styles.logoContainer}>
-        <img src="/imagenes/logocompleto.png" alt="PawPal Logo" style={styles.logoImage} />
-      </div>
-    </Modal>
+            <div style={styles.logoContainer}>
+              <img src="/imagenes/logocompleto.png" alt="PawPal Logo" style={styles.logoImage} />
+            </div>
+          </Modal>
+
+          {/* Muestra el RegisterModal cuando el usuario hace clic en "Sign up" */}
+      <RegisterModal isOpen={showRegister} onRequestClose={closeModals} />
+    </>
   );
 };
 
